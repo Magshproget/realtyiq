@@ -1,0 +1,7 @@
+{
+  "bootstrap_coverage_95": 0.2345679012345679,
+  "bootstrap_coverage_80": 0.15866483767718337,
+  "bootstrap_avg_width": 227.107421875,
+  "quantile_coverage_90": 0.8491083676268861,
+  "quantile_avg_width": 1240.693603515625
+}

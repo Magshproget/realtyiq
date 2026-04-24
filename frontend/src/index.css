@@ -1,0 +1,166 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #f0f4f8;
+  color: #1a202c;
+  min-height: 100vh;
+}
+
+.container { max-width: 900px; margin: 0 auto; padding: 0 16px; }
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
+  color: white;
+  padding: 20px 0;
+  margin-bottom: 32px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.header h1 { font-size: 1.8rem; font-weight: 700; }
+.header p  { font-size: 0.9rem; opacity: 0.85; margin-top: 4px; }
+
+/* Card */
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  margin-bottom: 24px;
+}
+.card h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #ebf4ff;
+}
+
+/* Form */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 0.82rem; font-weight: 600; color: #4a5568; }
+
+.form-group input,
+.form-group select {
+  padding: 10px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color .2s;
+  outline: none;
+}
+.form-group input:focus,
+.form-group select:focus { border-color: #3182ce; }
+
+.btn-submit {
+  margin-top: 24px;
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #2b6cb0, #3182ce);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+.btn-submit:hover   { opacity: 0.9; }
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Result Card */
+.result-main {
+  background: linear-gradient(135deg, #ebf8ff, #e6fffa);
+  border: 1.5px solid #bee3f8;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.result-main .price-sm  { font-size: 2.8rem; font-weight: 800; color: #2b6cb0; }
+.result-main .price-lbl { font-size: 0.85rem; color: #718096; margin-top: 2px; }
+.result-main .price-total {
+  margin-top: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #276749;
+}
+
+/* Intervals */
+.interval-block { margin-bottom: 16px; }
+.interval-label { font-size: 0.82rem; color: #4a5568; margin-bottom: 6px; font-weight: 600; }
+.interval-bar-wrap { position: relative; height: 32px; }
+.interval-bar {
+  position: absolute;
+  height: 100%;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+}
+.bar-95 { background: rgba(49,130,206,0.25); }
+.bar-80 { background: rgba(49,130,206,0.6);  }
+.interval-vals {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: #718096;
+  margin-top: 4px;
+}
+
+/* SHAP */
+.shap-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.shap-name  { width: 180px; font-size: 0.82rem; color: #4a5568; flex-shrink: 0; }
+.shap-bar-wrap { flex: 1; background: #edf2f7; border-radius: 4px; height: 18px; position: relative; }
+.shap-bar {
+  height: 100%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+}
+.shap-pos { background: #38a169; }
+.shap-neg { background: #e53e3e; margin-left: auto; }
+.shap-val { width: 60px; font-size: 0.78rem; text-align: right; color: #718096; }
+
+/* Error */
+.error-box {
+  background: #fff5f5;
+  border: 1px solid #fc8181;
+  border-radius: 8px;
+  padding: 14px;
+  color: #c53030;
+  font-size: 0.9rem;
+}
+
+.spinner {
+  display: inline-block;
+  width: 18px; height: 18px;
+  border: 3px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
