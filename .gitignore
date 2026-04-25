@@ -29,3 +29,9 @@ npm-debug.log*
 # Claude Code internal files
 .path
 .claude/
+
+# Large data files
+data/*.csv
+
+# Trained model artifacts
+ml/model/*.pkl

@@ -155,8 +155,7 @@ ax.scatter(x_pos, y_test_orig.values[sort_idx],
            color='#E74C3C', s=12, zorder=5, label='Реальна цiна')
 
 ax.set_xlabel('Об\'єкт (впорядкований за зростанням цiни)')
-ax.set_ylabel('Цiна за м2, USD')
-ax.set_title('Рисунок 4.18 — Bootstrap довiрчi iнтервали прогнозу (80 об\'єктiв)')
+ax.set_ylabel('Ціна за м², USD')
 ax.legend(loc='upper left', fontsize=9)
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '18_bootstrap_intervals.png'), bbox_inches='tight')
@@ -177,8 +176,7 @@ ax.scatter(x_pos, y_test_orig.values[sort_idx],
            color='#E74C3C', s=12, zorder=5, label='Реальна цiна')
 
 ax.set_xlabel('Об\'єкт (впорядкований за зростанням цiни)')
-ax.set_ylabel('Цiна за м2, USD')
-ax.set_title('Рисунок 4.19 — Квантильна регресiя: предикцiйнi iнтервали (Q5–Q95)')
+ax.set_ylabel('Ціна за м², USD')
 ax.legend(loc='upper left', fontsize=9)
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '19_quantile_intervals.png'), bbox_inches='tight')
@@ -207,8 +205,7 @@ bars    = ax.bar(risk_by_district.index, risk_by_district.values,
 for bar, val in zip(bars, risk_by_district.values):
     ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.5,
             f'{val:.1f}%', ha='center', va='bottom', fontsize=9)
-ax.set_ylabel('Медiанна ширина CI / Прогноз, %')
-ax.set_title('Рисунок 4.20 — Ризик прогнозу по районах (вiдносна ширина 95% CI)')
+ax.set_ylabel('Медіанна ширина ДІ / Прогноз, %')
 ax.set_xticklabels(risk_by_district.index, rotation=20, ha='right')
 patches = [
     mpatches.Patch(color='#E74C3C', label='Високий ризик (>50%)'),
@@ -235,7 +232,6 @@ axes[0].bar(methods, coverages, color=['#3498DB', '#27AE60'],
 axes[0].axhline(95, color='#3498DB', linestyle='--', alpha=0.6, label='Цiльове 95%')
 axes[0].axhline(90, color='#27AE60', linestyle='--', alpha=0.6, label='Цiльове 90%')
 axes[0].set_ylabel('Покриття, %')
-axes[0].set_title('Фактичне покриття')
 axes[0].set_ylim(0, 110)
 for i, v in enumerate(coverages):
     axes[0].text(i, v + 1, f'{v:.1f}%', ha='center', fontweight='bold')
@@ -243,13 +239,10 @@ axes[0].legend(fontsize=8)
 
 axes[1].bar(methods, widths, color=['#3498DB', '#27AE60'],
             edgecolor='white', width=0.5)
-axes[1].set_ylabel('Середня ширина iнтервалу, USD/m2')
-axes[1].set_title('Ширина iнтервалу (менше = точнiше)')
+axes[1].set_ylabel('Середня ширина інтервалу, USD/м²')
 for i, v in enumerate(widths):
     axes[1].text(i, v + 5, f'{v:.0f}', ha='center', fontweight='bold')
 
-fig.suptitle('Рисунок 4.21 — Порiвняння методiв iнтервального оцiнювання',
-             fontsize=13, fontweight='bold')
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '21_methods_comparison.png'), bbox_inches='tight')
 plt.close()

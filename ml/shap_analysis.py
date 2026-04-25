@@ -81,32 +81,7 @@ shap_values = explainer.shap_values(X_sample)
 
 print("[3] SHAP values розраховано")
 
-# ============================================================================
-# ГРАФІК 1 — Summary Plot (bee swarm) — найважливіший для диплому
-# ============================================================================
-fig, ax = plt.subplots(figsize=(10, 7))
-shap.summary_plot(
-    shap_values, X_sample,
-    feature_names=feature_names,
-    show=False, plot_size=None,
-    max_display=16
-)
-plt.title('Рисунок 4.14 — SHAP Summary Plot: вплив ознак на прогноз ціни',
-          fontsize=12, pad=10)
-plt.tight_layout()
-plt.savefig(os.path.join(PLOTS, '14_shap_summary.png'), bbox_inches='tight')
-plt.close()
-print("[4] Збережено: 14_shap_summary.png")
-
-# ============================================================================
-# ГРАФІК 2 — Bar Plot (середній |SHAP|) — рейтинг важливості ознак
-# ============================================================================
-mean_shap = pd.Series(
-    np.abs(shap_values).mean(axis=0),
-    index=feature_names
-).sort_values(ascending=True)
-
-# Перекладаємо назви для читабельності
+# Словник перекладів ознак — використовується у графіках 1 і 2
 name_map = {
     'area_total':      'Загальна площа',
     'area_living':     'Житлова площа',
@@ -128,6 +103,42 @@ name_map = {
     'wall':            'Матеріал стін',
     'project':         'Тип проекту',
 }
+ua_feature_names = [name_map.get(n, n) for n in feature_names]
+
+# ============================================================================
+# ГРАФІК 1 — Summary Plot (bee swarm)
+# ============================================================================
+shap.summary_plot(
+    shap_values, X_sample,
+    feature_names=ua_feature_names,
+    show=False, plot_size=(10, 7),
+    max_display=16
+)
+fig14 = plt.gcf()
+for ax_ in fig14.axes:
+    xl = ax_.get_xlabel()
+    if xl and ('SHAP' in xl or 'impact' in xl.lower()):
+        ax_.set_xlabel('SHAP-значення (вплив на прогноз моделі)')
+    yl = ax_.get_ylabel()
+    if 'Feature value' in yl:
+        ax_.set_ylabel('Значення ознаки')
+    for txt in ax_.get_yticklabels():
+        if txt.get_text() == 'High':
+            txt.set_text('Високе')
+        elif txt.get_text() == 'Low':
+            txt.set_text('Низьке')
+plt.tight_layout()
+plt.savefig(os.path.join(PLOTS, '14_shap_summary.png'), bbox_inches='tight')
+plt.close()
+print("[4] Збережено: 14_shap_summary.png")
+
+# ============================================================================
+# ГРАФІК 2 — Bar Plot (середній |SHAP|)
+# ============================================================================
+mean_shap = pd.Series(
+    np.abs(shap_values).mean(axis=0),
+    index=feature_names
+).sort_values(ascending=True)
 mean_shap.index = [name_map.get(n, n) for n in mean_shap.index]
 
 colors = ['#2ECC71' if v >= mean_shap.quantile(0.66)
@@ -140,8 +151,7 @@ bars = ax.barh(mean_shap.index, mean_shap.values,
 for bar, val in zip(bars, mean_shap.values):
     ax.text(bar.get_width() + 0.0005, bar.get_y() + bar.get_height()/2,
             f'{val:.4f}', va='center', fontsize=8.5)
-ax.set_xlabel('Середнє |SHAP| значення (вплив на log-ціну)')
-ax.set_title('Рисунок 4.15 — Рейтинг важливості ознак (SHAP Feature Importance)')
+ax.set_xlabel('Середнє |SHAP| значення (вплив на логарифм ціни)')
 patches = [
     mpatches.Patch(color='#2ECC71', label='Висока важливість'),
     mpatches.Patch(color='#F39C12', label='Середня важливість'),
@@ -174,8 +184,6 @@ shap_single.feature_names = [name_map.get(n, n) for n in feature_names]
 
 fig, ax = plt.subplots(figsize=(11, 6))
 shap.waterfall_plot(shap_single[0], max_display=12, show=False)
-plt.title('Рисунок 4.16 — SHAP Waterfall: пояснення прогнозу для конкретного об\'єкта',
-          fontsize=11, pad=10)
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '16_shap_waterfall.png'), bbox_inches='tight')
 plt.close()
@@ -196,10 +204,9 @@ sc1 = axes[0].scatter(
     alpha=0.3, s=10
 )
 axes[0].axhline(0, color='red', linestyle='--', linewidth=1)
-axes[0].set_xlabel('Загальна площа, м2')
+axes[0].set_xlabel('Загальна площа, м²')
 axes[0].set_ylabel('SHAP значення')
-axes[0].set_title('Залежність: Площа → SHAP')
-plt.colorbar(sc1, ax=axes[0], label='Район (encoded)')
+plt.colorbar(sc1, ax=axes[0], label='Район (закодований)')
 
 year_idx = feature_names.index('year')
 sc2 = axes[1].scatter(
@@ -211,11 +218,8 @@ sc2 = axes[1].scatter(
 axes[1].axhline(0, color='red', linestyle='--', linewidth=1)
 axes[1].set_xlabel('Рік побудови')
 axes[1].set_ylabel('SHAP значення')
-axes[1].set_title('Залежність: Рік побудови -> SHAP')
-plt.colorbar(sc2, ax=axes[1], label='Площа, м2')
+plt.colorbar(sc2, ax=axes[1], label='Площа, м²')
 
-fig.suptitle('Рисунок 4.17 — Аналiз чутливостi: залежнiсть SHAP-значень вiд ключових ознак',
-             fontsize=12, fontweight='bold')
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '17_shap_dependence.png'), bbox_inches='tight')
 plt.close()

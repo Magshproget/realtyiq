@@ -180,8 +180,7 @@ for bar, val in zip(bars, results_df['R2']):
     ax.text(bar.get_width() - 0.01, bar.get_y() + bar.get_height()/2,
             f'{val:.4f}', va='center', ha='right',
             color='white', fontweight='bold', fontsize=10)
-ax.set_xlabel('Коефіцієнт детермінації R2')
-ax.set_title('Рисунок 4.9 — Порівняння моделей за метрикою R2')
+ax.set_xlabel('Коефіцієнт детермінації R²')
 ax.set_xlim(0, 1.05)
 ax.axvline(0.85, color='gray', linestyle='--', alpha=0.5, label='Поріг якості (0.85)')
 ax.legend()
@@ -198,20 +197,16 @@ palette = sns.color_palette('Set2', len(results_df))
 
 axes[0].barh(results_df['Модель'], results_df['MAE'],
              color=palette, edgecolor='white', height=0.6)
-axes[0].set_xlabel('MAE (USD/m2)')
-axes[0].set_title('MAE — середня абсолютна похибка')
+axes[0].set_xlabel('MAE (USD/м²)')
 for i, v in enumerate(results_df['MAE']):
     axes[0].text(v + 1, i, f'{v:.0f}', va='center', fontsize=9)
 
 axes[1].barh(results_df['Модель'], results_df['RMSE'],
              color=palette, edgecolor='white', height=0.6)
-axes[1].set_xlabel('RMSE (USD/m2)')
-axes[1].set_title('RMSE — середньоквадратична похибка')
+axes[1].set_xlabel('RMSE (USD/м²)')
 for i, v in enumerate(results_df['RMSE']):
     axes[1].text(v + 1, i, f'{v:.0f}', va='center', fontsize=9)
 
-fig.suptitle('Рисунок 4.10 — Порівняння моделей за метриками MAE та RMSE',
-             fontsize=13, fontweight='bold')
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '10_models_mae_rmse.png'), bbox_inches='tight')
 plt.close()
@@ -225,9 +220,8 @@ ax.scatter(y_test_orig, y_pred_best, alpha=0.25, s=8, color='#3498DB')
 lims = [min(y_test_orig.min(), y_pred_best.min()),
         max(y_test_orig.max(), y_pred_best.max())]
 ax.plot(lims, lims, 'r--', linewidth=1.5, label='Ідеальний прогноз')
-ax.set_xlabel('Реальна ціна, USD/m2')
-ax.set_ylabel('Прогнозована ціна, USD/m2')
-ax.set_title('Рисунок 4.11 — Реальні vs прогнозні значення (XGBoost)')
+ax.set_xlabel('Реальна ціна, USD/м²')
+ax.set_ylabel('Прогнозована ціна, USD/м²')
 ax.legend()
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '11_actual_vs_predicted.png'), bbox_inches='tight')
@@ -245,17 +239,13 @@ axes[0].hist(pct_errors, bins=60, color='#9B59B6', edgecolor='white', alpha=0.8)
 axes[0].axvline(0, color='red', linestyle='--')
 axes[0].set_xlabel('Відносна похибка, %')
 axes[0].set_ylabel('Кількість')
-axes[0].set_title('Розподіл відносних похибок')
 axes[0].set_xlim(-60, 60)
 
 axes[1].scatter(y_pred_best, residuals, alpha=0.2, s=8, color='#9B59B6')
 axes[1].axhline(0, color='red', linestyle='--')
-axes[1].set_xlabel('Прогнозована ціна, USD/m2')
+axes[1].set_xlabel('Прогнозована ціна, USD/м²')
 axes[1].set_ylabel('Залишки')
-axes[1].set_title('Залишки vs Прогнозовані значення')
 
-fig.suptitle('Рисунок 4.12 — Аналіз залишків моделі XGBoost',
-             fontsize=13, fontweight='bold')
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '12_residuals.png'), bbox_inches='tight')
 plt.close()
@@ -296,8 +286,7 @@ for i, (name, scores) in enumerate(cv_results.items()):
                boxprops=dict(facecolor=clrs[i], alpha=0.7))
 ax.set_xticks(range(len(cv_results)))
 ax.set_xticklabels(cv_results.keys())
-ax.set_ylabel('R2 (5-fold CV, log-space)')
-ax.set_title('Рисунок 4.13 — Крос-валідація топ-3 моделей')
+ax.set_ylabel('R² (5-fold крос-валідація)')
 ax.grid(axis='y', linestyle='--', alpha=0.4)
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '13_cross_validation.png'), bbox_inches='tight')

@@ -35,8 +35,20 @@ print(f"[1] Завантажено: {df.shape[0]} рядків, {df.shape[1]} к
 # ══════════════════════════════════════════════════════════════════════════════
 # ГРАФІК 1 — Пропущені значення (до очищення)
 # ══════════════════════════════════════════════════════════════════════════════
+col_ua = {
+    'complex': 'ЖК (назва комплексу)', 'area_living': 'Житлова площа',
+    'area_kitchen': 'Площа кухні', 'year': 'Рік побудови',
+    'project': 'Тип проекту', 'wall': 'Матеріал стін',
+    'stock_total': 'Поверховість', 'hist_district': 'Район',
+    'description': 'Опис', 'city': 'Місто',
+    'price_sm': 'Ціна/м²', 'area_total': 'Заг. площа',
+    'rooms': 'Кімнати', 'stock': 'Поверх',
+    'floor_ratio': 'Відн. поверх',
+}
+
 miss = df.isnull().sum()
 miss = miss[miss > 0].sort_values(ascending=True)
+miss.index = [col_ua.get(c, c) for c in miss.index]
 
 fig, ax = plt.subplots(figsize=(8, 5))
 bars = ax.barh(miss.index, miss.values, color='#E74C3C', edgecolor='white')
@@ -44,7 +56,6 @@ for bar, val in zip(bars, miss.values):
     ax.text(bar.get_width() + 20, bar.get_y() + bar.get_height()/2,
             f'{val} ({val/len(df)*100:.1f}%)', va='center', fontsize=9)
 ax.set_xlabel('Кількість пропущених значень')
-ax.set_title('Рисунок 4.1 — Пропущені значення у вихідному датасеті')
 ax.set_xlim(0, miss.max() * 1.25)
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '01_missing_values.png'), bbox_inches='tight')
@@ -57,7 +68,6 @@ print("[1] Збережено: 01_missing_values.png")
 fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
 axes[0].hist(df['price_sm'], bins=80, color='#3498DB', edgecolor='white', alpha=0.8)
-axes[0].set_title('До очищення (всі записи)')
 axes[0].set_xlabel('Ціна за м², USD')
 axes[0].set_ylabel('Кількість оголошень')
 axes[0].axvline(df['price_sm'].median(), color='red', linestyle='--', label=f"Медіана: {df['price_sm'].median():.0f}")
@@ -65,11 +75,9 @@ axes[0].legend()
 
 axes[1].hist(df['price_sm'], bins=80, color='#3498DB', edgecolor='white', alpha=0.8)
 axes[1].set_xlim(0, 5000)
-axes[1].set_title('До очищення (до 5000 USD/м²)')
 axes[1].set_xlabel('Ціна за м², USD')
 axes[1].set_ylabel('Кількість оголошень')
 
-fig.suptitle('Рисунок 4.2 — Розподіл ціни за м² до очищення', fontsize=13, fontweight='bold')
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '02_price_dist_before.png'), bbox_inches='tight')
 plt.close()
@@ -135,7 +143,6 @@ ax.axvline(df['price_sm'].median(), color='orange', linestyle='--', linewidth=1.
            label=f"Медіана: {df['price_sm'].median():.0f}")
 ax.set_xlabel('Ціна за м², USD')
 ax.set_ylabel('Кількість оголошень')
-ax.set_title('Рисунок 4.3 — Розподіл ціни за м² після очищення')
 ax.legend()
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '03_price_dist_after.png'), bbox_inches='tight')
@@ -156,7 +163,6 @@ sns.boxplot(data=df_dist, x='hist_district', y='price_sm',
             flierprops=dict(marker='.', markersize=2, alpha=0.3))
 ax.set_xlabel('Район')
 ax.set_ylabel('Ціна за м², USD')
-ax.set_title('Рисунок 4.4 — Розподіл ціни за м² по районах міста')
 plt.xticks(rotation=25, ha='right')
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '04_price_by_district.png'), bbox_inches='tight')
@@ -173,7 +179,6 @@ scatter = ax.scatter(df['area_total'], df['price_sm'],
 plt.colorbar(scatter, ax=ax, label='Кількість кімнат')
 ax.set_xlabel('Загальна площа, м²')
 ax.set_ylabel('Ціна за м², USD')
-ax.set_title('Рисунок 4.5 — Залежність ціни від площі (колір — кількість кімнат)')
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '05_area_vs_price.png'), bbox_inches='tight')
 plt.close()
@@ -191,7 +196,6 @@ for bar, val in zip(bars, rooms_avg['price_sm']):
             f'{val:.0f}', ha='center', va='bottom', fontsize=9)
 ax.set_xlabel('Кількість кімнат')
 ax.set_ylabel('Медіанна ціна за м², USD')
-ax.set_title('Рисунок 4.6 — Медіанна ціна за м² залежно від кількості кімнат')
 ax.set_xticks(rooms_avg['rooms'])
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '06_rooms_vs_price.png'), bbox_inches='tight')
@@ -204,13 +208,14 @@ print("[6] Збережено: 06_rooms_vs_price.png")
 num_cols = ['price_sm', 'area_total', 'area_living', 'area_kitchen',
             'rooms', 'stock', 'stock_total', 'year', 'floor_ratio']
 corr = df[num_cols].corr()
+corr.index   = [col_ua.get(c, c) for c in corr.index]
+corr.columns = [col_ua.get(c, c) for c in corr.columns]
 
 fig, ax = plt.subplots(figsize=(9, 7))
 mask = np.triu(np.ones_like(corr, dtype=bool))
 sns.heatmap(corr, mask=mask, annot=True, fmt='.2f', cmap='RdYlGn',
             center=0, linewidths=0.5, ax=ax,
             annot_kws={'size': 9})
-ax.set_title('Рисунок 4.7 — Кореляційна матриця числових ознак')
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '07_correlation_matrix.png'), bbox_inches='tight')
 plt.close()
@@ -227,7 +232,6 @@ ax.plot(year_avg.index, year_avg.values, color='#E67E22', linewidth=2)
 ax.fill_between(year_avg.index, year_avg.values, alpha=0.15, color='#E67E22')
 ax.set_xlabel('Рік побудови')
 ax.set_ylabel('Медіанна ціна за м², USD')
-ax.set_title('Рисунок 4.8 — Медіанна ціна за м² залежно від року побудови')
 ax.grid(axis='y', linestyle='--', alpha=0.4)
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS, '08_year_vs_price.png'), bbox_inches='tight')
