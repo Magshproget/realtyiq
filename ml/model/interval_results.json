@@ -1,7 +1,9 @@
 {
-  "bootstrap_coverage_95": 0.2345679012345679,
-  "bootstrap_coverage_80": 0.15866483767718337,
-  "bootstrap_avg_width": 227.107421875,
-  "quantile_coverage_90": 0.8491083676268861,
-  "quantile_avg_width": 1240.693603515625
+  "bootstrap_coverage_95": 0.857563025210084,
+  "bootstrap_coverage_80": 0.6554621848739496,
+  "bootstrap_avg_width": 1104.1566284179698,
+  "quantile_coverage_90": 0.8554621848739495,
+  "quantile_avg_width": 1107.45849609375,
+  "conformal_coverage_90": 0.9029411764705882,
+  "conformal_avg_width": 1044.216184850093
 }

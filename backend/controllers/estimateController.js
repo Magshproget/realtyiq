@@ -10,7 +10,7 @@ const createEstimate = async (req, res) => {
     const {
       hist_district, rooms, area_total, area_living,
       area_kitchen, stock, stock_total, year,
-      wall, project, is_complex,
+      wall, project, is_complex, lat, lon,
     } = req.body;
 
     // 1. Валідація
@@ -40,6 +40,7 @@ const createEstimate = async (req, res) => {
         wall:         wall    || 'Невідомо',
         project:      project || 'Невідомо',
         is_complex:   is_complex ? 1 : 0,
+        ...(lat != null && lon != null ? { lat: Number(lat), lon: Number(lon) } : {}),
       });
       mlData = mlResponse.data;
     } catch (mlErr) {

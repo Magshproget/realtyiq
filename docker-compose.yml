@@ -1,22 +1,33 @@
 services:
+
   ml:
     build:
       context: .
       dockerfile: ml/Dockerfile
-    ports:
-      - "8000:8000"
+    volumes:
+      - ./ml/model:/app/ml/model:ro
+      - ./data:/app/data:ro
+    expose:
+      - "8000"
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    ports:
-      - "3001:3001"
+    expose:
+      - "3001"
     environment:
       - ML_SERVICE_URL=http://ml:8000
     depends_on:
-      - ml
+      ml:
+        condition: service_healthy
     restart: unless-stopped
 
   frontend:
@@ -24,9 +35,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "5173:5173"
-    environment:
-      - BACKEND_URL=http://backend:3001
+      - "5173:80"
     depends_on:
       - backend
     restart: unless-stopped

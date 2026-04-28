@@ -17,7 +17,7 @@ app.post('/api/estimates', async (req, res) => {
   console.log('POST /api/estimates body:', JSON.stringify(req.body).slice(0, 80));
   const { hist_district, rooms, area_total, area_living,
           area_kitchen, stock, stock_total, year,
-          wall, project, is_complex } = req.body;
+          wall, project, is_complex, lat, lon } = req.body;
 
   const errors = [];
   if (!hist_district)                 errors.push('hist_district обовязковий');
@@ -39,8 +39,9 @@ app.post('/api/estimates', async (req, res) => {
       stock_total:  Number(stock_total),
       year:         Number(year),
       wall:         wall    || 'Невідомо',
-      project:      project || 'Невідомо',
+      project:      project || 'спец. проект',
       is_complex:   is_complex ? 1 : 0,
+      ...(lat != null && lon != null ? { lat: Number(lat), lon: Number(lon) } : {}),
     });
 
     return res.json({

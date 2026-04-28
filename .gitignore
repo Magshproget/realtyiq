@@ -10,28 +10,54 @@ venv/
 node_modules/
 frontend/dist/
 
-# Environment
+# Environment (ніколи не пушити паролі)
+.env
 .env.local
 .env.*.local
+backend/.env
 
-# OS
+# OS / IDE
 .DS_Store
 Thumbs.db
-
-# IDE
 .vscode/
 .idea/
-
-# Logs
 *.log
 npm-debug.log*
 
-# Claude Code internal files
+# Claude Code
 .path
 .claude/
 
-# Large data files
-data/*.csv
+# Артефакти навчання (не потрібні для запуску)
+ml/model/feature_names.pkl
+ml/model/num_features.pkl
+ml/model/xgboost_model_train.pkl
+catboost_info/
 
-# Trained model artifacts
-ml/model/*.pkl
+# Сирі дані (не потрібні для запуску)
+data/class_flat.csv
+data/class_flat_clean.csv
+
+# Скрипти аналізу / навчання (тільки для диплому)
+ml/train.py
+ml/optuna_boost.py
+ml/preprocess.py
+ml/intervals.py
+ml/shap_analysis.py
+ml/diploma_chart.py
+ml/map_analysis.py
+eda/eda_analysis.py
+eda/price_index_chart.py
+eda/map_analysis.py
+
+# Згенеровані графіки (diploma-specific, не потрібні для запуску)
+eda/plots/
+ml/plots/
+
+# Геокодинг кеш і логи
+data/geocache.json
+data/kyiv_metro.json
+data/poi_*.json
+ml/geocode.py
+ml/geocode_log.txt
+ml/geocode_retry_log.txt
