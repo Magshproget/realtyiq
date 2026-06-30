@@ -61,3 +61,9 @@ data/poi_*.json
 ml/geocode.py
 ml/geocode_log.txt
 ml/geocode_retry_log.txt
+
+# Мд файли для claude
+claude-memory/MEMORY.md
+claude-memory/project_diagrams.md
+claude-memory/project_realtyiq.md
+claude-memory/user_profile.md
