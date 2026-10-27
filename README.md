@@ -1,5 +1,5 @@
 # RealtyIQ — Інструкція із запуску
-
+Update
 ## Що потрібно
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) — встановити і запустити
